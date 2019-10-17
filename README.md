@@ -1,1 +1,11 @@
 # Group14
+
+install https://nodejs.org/en/
+npx create-react-app my-app
+fetch origin in Github desktop
+
+npm i @material-ui/core
+npm i @material-ui/icons
+npm i recharts
+
+npm start
