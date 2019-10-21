@@ -1,0 +1,29 @@
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import Title from './Title';
+
+const useStyles = makeStyles({
+  depositContext: {
+    flex: 1,
+  },
+});
+
+export default function Forcast() {
+  const classes = useStyles();
+  return (
+    <React.Fragment>
+      <Title>Forecast</Title>
+      <Typography component="p" variant="h4">
+
+      </Typography>
+      <Typography color="textSecondary" className={classes.depositContext}>
+        Averaged 5 day weather forecast
+      </Typography>
+      <div>
+        <Link color="primary" href="javascript:;">
+          View Breakdowns
+        </Link>
+      </div>
+    </React.Fragment>
+  );
+}
