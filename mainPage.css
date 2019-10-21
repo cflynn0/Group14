@@ -1,0 +1,40 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+}
+
+.App-header {
+  background-color: Purple;
+  min-height: 25vh;
+  display: flex;
+  flex-direction: column;
+  align-items: right;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: clear;
+}
+
+.App-link {
+  color: #09d3ac;
+}
+
+.Btns{
+	margin-bottom: -1px;
+	height: 30vh;
+}
+
+table#todaysWeather{
+	width: 50%;
+}
+
+table#weatherExp{
+	margin-right: -1 px;
+	width: 50%;
+}
+
+p#pushed{
+	margin-left: 175px;
+}
