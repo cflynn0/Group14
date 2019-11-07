@@ -11,4 +11,4 @@ npm start
 
 npm install react-router-dom
 
-npm install react-excel-renderer --start
+npm install @grapecity/spread-sheets-react
