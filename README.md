@@ -10,3 +10,5 @@ npm i recharts
 npm start
 
 npm install react-router-dom
+
+npm install react-excel-renderer --start
