@@ -1,61 +1,19 @@
 import React from 'react';
-import Dashboard from './Dashboard'
-// import {
-  // BrowserRouter as Router,
-  // Switch,
-  // Route,
-  // Link
-// } from "react-router-dom";
+import {Route, Switch} from 'react-router-dom';
+import Forecast from './Forecast';
+import mainPage from './mainPage';
+import Dashboard from './Dashboard';
 
 function App() {
   return (
-   
-   
-   // <Router>
-	<Dashboard/>
-      // <div>
-        // <nav>
-          // <ul>
-            // <li>
-              // <Link to="/">Home</Link>
-            // </li>
-            // <li>
-              // <Link to="/about">About</Link>
-            // </li>
-            // <li>
-              // <Link to="/users">Users</Link>
-            // </li>
-          // </ul>
-        // </nav>
-
-        // {/* A <Switch> looks through its children <Route>s and
-            // renders the first one that matches the current URL. */}
-        // <Switch>
-          // <Route path="/about">
-            // <About />
-          // </Route>
-          // <Route path="/users">
-            // <Users />
-          // </Route>
-          // <Route path="/">
-            // <Home />
-          // </Route>
-        // </Switch>
-      // </div>
-    // </Router>
+    <div>
+      <Switch>
+        <Route path='/forecast' component={Forecast}/>
+        <Route path='/weather' component={mainPage}/>
+        <Route path='/' component={Dashboard}/>
+      </Switch>
+    </div>
   );
 }
 
-// function Home() {
-  // return <h2>Home</h2>;
-// }
-
-// function About() {
-  // return <h2>About</h2>;
-// }
-
-// function Users() {
-  // return <h2>Users</h2>;
-// }
-
-// export default App;
+export default App;

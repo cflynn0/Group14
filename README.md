@@ -13,4 +13,6 @@ npm install react-router-dom
 
 npm install @grapecity/spread-sheets-react
 
-npm install bootsrap
+npm install bootstrap
+
+npm install react-bootstrap    (for mainPage.js)
