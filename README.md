@@ -9,7 +9,6 @@ npm install @material-ui/core
 npm install @material-ui/icons
 npm install recharts
 npm install react-router-dom
-npm install @grapecity/spread-sheets-react
 npm install bootstrap
 npm install react-bootstrap    (for mainPage.js)
 
