@@ -1,8 +1,8 @@
-import React, {} from 'react';
+import React, {Component} from 'react';
 import './App.css';
 import {Table, Navbar, Nav, NavDropdown, ButtonToolbar, ButtonGroup, Button} from 'react-bootstrap';
 
-class mainPage extends React.Component { 
+class mainPage extends Component { 
 	render(){
 	
   return (
@@ -128,7 +128,7 @@ class mainPage extends React.Component {
 }
 }
 
-export default App;
+export default mainPage;
 /*
 	<Navbar.Header>
 	</Navbar.Header>
