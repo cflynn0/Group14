@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { NotFound } from './Errors'
-import Writers from './Writers'
-import Layout from './Layout'
+import Layout from './Layout/index'
 import Forecast from './Forecast'
 import Weather from './Weather'
+import Login from './Login'
 
 export default class extends Component {
   state = {
@@ -23,11 +23,8 @@ export default class extends Component {
     return <BrowserRouter>
       <Layout writers={writers}>
         <Switch>
-          <Route exact path="/" render={() => <div>Home</div>} />
-          
-          <Route path="/writers" render={
-            props => <Writers {...props} writers={writers} />
-          } />
+          <Route exact path="/" render={() => <Login />} />
+          <Route exact path="/login" render={() => <Login />} />
           <Route exact path="/forecast" render={() => <Forecast />} />
           <Route exact path="/weather" render={() => <Weather />} />
           <Route component={NotFound} />

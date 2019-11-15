@@ -63,11 +63,8 @@ class Layout extends Component {
           <div className={classes.toolbar} />
         </Hidden>
         <MenuList>
-          <MenuItem component={Link} to="/" selected={'/' === pathname}>
-            Home
-          </MenuItem>
-          <MenuItem component={Link} to="/writers" selected={'/writers' === pathname}>
-            Writers
+          <MenuItem component={Link} to="/login" selected={'/login' === pathname}>
+            Login
           </MenuItem>
           <MenuItem component={Link} to="/forecast" selected={'/forecast' === pathname}>
             Forecast
@@ -109,7 +106,7 @@ class Layout extends Component {
               <Menu />
             </IconButton>
             <Typography variant="h6" color="inherit" noWrap>
-              Writers Blog
+              Gustbuddy
             </Typography>
           </Toolbar>
         </AppBar>
