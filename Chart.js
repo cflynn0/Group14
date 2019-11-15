@@ -1,9 +1,10 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
 import Title from './Title';
-import Papa from 'papaparse';
+//import Papa from 'papaparse';
 
-var data;
+//More broken parse code
+/*var data;
 Papa.parse('DateDamage.csv', {
   header: true,
   download: true,
@@ -12,7 +13,7 @@ Papa.parse('DateDamage.csv', {
     console.log(results);
     data = results.data;
   }
-});
+});*/
 
 // Generate Sales Data
 function createData(Date, Damage) {
@@ -21,14 +22,15 @@ function createData(Date, Damage) {
 
 //Broken parse code for csv file DateDamage.csv
 //File = fetch('DateDamage.csv')
-/*const data = [
- forEach(i => {
+
+/* forEach(i => {
     const col=i.split(',');
     const Date=col[0];
     const Damage=col[1];
     createData(Date, Damage)
-  }];
-/*  createData('00:00', 0),
+  }];*/
+const data = [
+  createData('00:00', 0),
   createData('03:00', 300),
   createData('06:00', 600),
   createData('09:00', 800),
@@ -36,8 +38,8 @@ function createData(Date, Damage) {
   createData('15:00', 2000),
   createData('18:00', 2400),
   createData('21:00', 2400),
-  createData('24:00', undefined),*/
-//];
+  createData('24:00', undefined),
+];
 
 export default function Chart() {
   return (
