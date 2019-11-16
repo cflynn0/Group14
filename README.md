@@ -18,6 +18,7 @@ npm install recharts
 npm install react-router-dom
 npm install bootstrap
 npm install react-bootstrap    (for mainPage.js)
+npm install https://github.com/erikflowers/weather-icons.git
 
 master
 npm start
