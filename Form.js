@@ -1,34 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 
-import "./form.style.css";
+function Form() {
+  const [firstName, setFirstName] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
 
-const Form = props => {
-    return(
-        <div className="container">
-            <div>{props.error ? error() : null}</div>
-            <form onSubmit={props.loadWeather}>
-                <div className="row">
-                    <div className="col-md-3 offset-md-2">
-                        <input type="text" className="form-control" name="city" autoComplete="off" placeholder="City"/>
-                    </div>
-                    <div className="col-md-3">
-                        <input type="text" className="form-control" name="country" autoComplete="off" placeholder="Country"/>
-                    </div>
-                    <div className="col-md-3 mt-md-0 text-md-left">
-                        <button className="btn btn-warning">Get Weather</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    );
-};
+  const onSubmit = values => console.log(values);
 
-function error(){
-    return(
-        <div className="alert alert-danger mx-5" role="alert">
-            Please Enter City and Country
-        </div>
-    )
+  return (
+    <form onSubmit={onSubmit}>
+      <input
+        value={firstName}
+        onChange={e => setFirstName(e.target.value)}
+        placeholder="First name"
+        type="text"
+        name="firstName"
+        required
+      />
+      <input
+        value={location}
+        onChange={e => setLocation(e.target.value)}
+        placeholder="Location"
+        type="text"
+        name="location"
+        required
+      />
+      <input
+        value={description}
+        onChange={e => setDescription(e.target.value)}
+        placeholder="Description"
+        type="text"
+        name="description"
+        required
+      />
+      <button type="submit">Submit</button>
+    </form>
+  );
 }
-
 export default Form;
