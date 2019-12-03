@@ -19,6 +19,9 @@ npm install react-router-dom
 npm install bootstrap
 npm install react-bootstrap    (for mainPage.js)
 npm install https://github.com/erikflowers/weather-icons.git
+npm install react-share
+
+*may also need to run npm audit fix
 
 master
 npm start
