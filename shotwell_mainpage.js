@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
 //title bar
 import { makeStyles,withStyles } from '@material-ui/core/styles';
@@ -23,6 +23,8 @@ import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+//Score Indicator
+import ReactStoreIndicator from 'react-score-indicator';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,13 +44,14 @@ const useStyles = makeStyles(theme => ({
   },
     card: {
     width: '50%',
+	height: 690,
   },
   pos: {
     marginBottom: 12,
   },
 	image: {
     position: 'relative',
-    height: 200,
+    height: 300,
     [theme.breakpoints.down('xs')]: {
       width: '100% !important', // Overrides inline-style
       height: 100,
@@ -111,34 +114,52 @@ const useStyles = makeStyles(theme => ({
     left: 'calc(50% - 9px)',
     transition: theme.transitions.create('opacity'),
   },
+  ReactStoreIndicator:  {
+	stepColors:[
+  '#3da940',
+  '#3da940',
+  '#3da940',
+  '#53b83a',
+  '#84c42b',
+  '#f1bc00',
+  '#ed8d00',
+  '#d12000',
+	],
+	
+  },
 }));
 
+function getDay(Adj){
+const weekDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+var today = new Date();
+return today = weekDay[today.getDay()+Adj];
+};
 //GridList
 const images = [
   {
     url: 'https://s3-eu-west-1.amazonaws.com/s.i-images.co/thumbs/IIM-19185-0007.jpg',
-    title: 'Day 1',
+    title: getDay(0),
 	width: '20%',
   },
   {
     url: 'https://s3-eu-west-1.amazonaws.com/s.i-images.co/thumbs/IIM-19185-0005.jpg',
-    title: 'Day 2',
+    title: getDay(1),
     width: '20%',
   },
   {
     url: 'https://s3-eu-west-1.amazonaws.com/s.i-images.co/thumbs/IIM-19075-0006.jpg',
-    title: 'Day 3',
+    title: getDay(2),
     width: '20%',
   },
   {
     url: 'https://s3-eu-west-1.amazonaws.com/s.i-images.co/thumbs/IIM-18619-0011.jpg',
-    title: 'Day 4',
+    title: getDay(3),
     author: 'Image by Free-Photos on Pixabay',
     width: '20%',
   },
   {
     url: 'https://s3-eu-west-1.amazonaws.com/s.i-images.co/thumbs/IIM-16603-0017.jpg',
-    title: 'Day 5',
+    title: getDay(4),
     width: '20%',
   },
 ];
@@ -166,23 +187,87 @@ function createData(time, weather, temperature, humidity, wind ) {
 }
 
 const rows = [
-  createData('12:00 AM','forecast.weather.main','forecast.main.temp','forecast.main.humidity','forecast.wind.speed'),
-  createData('3:00 AM','forecast.weather.main','forecast.main.temp','forecast.main.humidity','forecast.wind.speed'),
-  createData('6:00 AM','forecast.weather.main','forecast.main.temp','forecast.main.humidity','forecast.wind.speed'),
-  createData('9:00 AM','forecast.weather.main','forecast.main.temp','forecast.main.humidity','forecast.wind.speed'),
-  createData('12:00 PM','forecast.weather.main','forecast.main.temp','forecast.main.humidity','forecast.wind.speed'),
-  createData('3:00 PM','forecast.weather.main','forecast.main.temp','forecast.main.humidity','forecast.wind.speed'),
-  createData('6:00 PM','forecast.weather.main','forecast.main.temp','forecast.main.humidity','forecast.wind.speed'),
-  createData('9:00 PM','forecast.weather.main','forecast.main.temp','forecast.main.humidity','forecast.wind.speed'),
+  createData('12:00 AM','data.list[0+(8*Adj)].weather.main','data.list[0+(8*Adj)].main.temp','data.list[0+(8*Adj)].main.humidity','data.list[0+(8*Adj)].wind.speed'),
+  createData('3:00 AM','data.list[1 + (8 * Adj)].weather.main','data.list[1 + (8 * Adj)].main.temp','data.list[1 + (8 * Adj)].main.humidity','data.list[1+ (8 * Adj)].wind.speed'),
+  createData('6:00 AM','data.list[2 + (8 * Adj)].weather.main','data.list[2 + (8 * Adj)].main.temp','data.list[2 + (8 * Adj)].main.humidity','data.list[2+ (8 * Adj)].wind.speed'),
+  createData('9:00 AM','data.list[3 + (8 * Adj)].weather.main','data.list[3 + (8 * Adj)].main.temp','data.list[3 + (8 * Adj)].main.humidity','data.list[3+ (8 * Adj)].wind.speed'),
+  createData('12:00 PM','data.list[4 + (8 * Adj)].weather.main','data.list[4 + (8 * Adj)].main.temp','data.list[4 + (8 * Adj)].main.humidity','data.list[4+ (8 * Adj)].wind.speed'),
+  createData('3:00 PM','data.list[5 + (8 * Adj)].weather.main','data.list[5 + (8 * Adj)].main.temp','data.list[5 + (8 * Adj)].main.humidity','data.list[5+ (8 * Adj)].wind.speed'),
+  createData('6:00 PM','data.list[6 + (8 * Adj)].weather.main','data.list[6 + (8 * Adj)].main.temp','data.list[6 + (8 * Adj)].main.humidity','data.list[6+ (8 * Adj)].wind.speed'),
+  createData('9:00 PM','data.list[7 + (8 * Adj)].weather.main','data.list[7 + (8 * Adj)].main.temp','data.list[7 + (8 * Adj)].main.humidity','data.list[7+ (8 * Adj)].wind.speed'),
 ];
-var wApiCall = 'api.openweathermap.org/data/2.5/weather?q=Tallahassee,US&appid=e5063c5a4e75f3258bdf88a45ded4a0a';
-var fApiCall = 'api.openweathermap.org/data/2.5/forecast?q=Tallahassee,US&appid=e5063c5a4e75f3258bdf88a45ded4a0a';
+
+var fApiCall = 'api.openweathermap.org/data/2.5/forecast?q=Tallahassee,US&appid=e5063c5a4e75f3258bdf88a45ded4a0a&units=metric';
 
 
+class SpeedChart extends Component {
+  render () {
+    return (
+      <ReactStoreIndicator
+        value={30}
+        maxValue={100}
+      />
+    )
+  }
+}
+
+
+class DisplayCreation extends React.Component {
+	state = {
+		loading: true,
+		log0: null,
+		log1: null,
+		log2: null,
+		log3: null,
+		log4: null,
+	};
+	
+	componentDidMount = async () => {
+	const url ="http://api.openweathermap.org/data/2.5/forecast?q=Tallahassee,US&appid=e5063c5a4e75f3258bdf88a45ded4a0a&units=metric";
+	const response = await fetch(url);
+	const data = await response.json();
+		this.setState({
+			log0: data.list[0],
+			log1: data.list[1],
+			log2: data.list[2],
+			log3: data.list[3],
+			log4: data.list[4],
+			loading:false,
+		});
+	console.log(this.state.log0);
+	}
+	
+
+
+	render(){
+		return(
+			<div>
+			{this.state.loading || !this.state.log0 ? (
+			<div> loading...</div>
+			) : (
+			<div>
+				<div> </div>
+			</div>
+			)}
+			</div>
+		);
+	}
+}
+
+
+//HTML
 export default function ButtonAppBar() {
   const classes = useStyles();
-
+	class ApiConnect extends React.Component{
+	getWeather = async (e) => {
+			e.preventDefault();
+			const api_call = await fetch('${fApiCall}');
+			const data = await api_call.json();
+			console.log(data);
+	}
+	};
   return (
+
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
@@ -212,7 +297,7 @@ export default function ButtonAppBar() {
 				</TableHead>
 				<TableBody>
 				  {rows.map(row => (
-					<StyledTableRow key={row.name} flexWrap="wrap">
+					<StyledTableRow key={row.name} flexwrap="wrap">
 					  <StyledTableCell component="th" scope="row" align="center">
 						{row.time}
 					  </StyledTableCell>
@@ -228,7 +313,7 @@ export default function ButtonAppBar() {
 			<Card className={classes.card}  m={1}>
       <CardContent>
         <Typography variant="h4" align = "center">
-          *Name of Day*'s Weather Summary
+			<script> document.write(getDay(2));</script>*Name of Day*'s Weather Summary
         </Typography>
         <Typography variant="h5">
           Example self populating sentence based on API data: You will have a clear morning, but make sure to get your errands done early as it will rain at 2pm. It clears up again at 6pm. To build after API is secured.
@@ -244,6 +329,7 @@ export default function ButtonAppBar() {
           <br />
           Sunset: 'weather.sys.sunset'
         </Typography>
+		<SpeedChart position = "right" />
       </CardContent>
       <CardActions>
 	  <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
@@ -252,7 +338,7 @@ export default function ButtonAppBar() {
       </CardActions>
     </Card>
 	</Box>
-		
+	
 		{images.map(image => (
         <ButtonBase
           focusRipple
@@ -283,50 +369,8 @@ export default function ButtonAppBar() {
           </span>
         </ButtonBase>
       ))}
+	  <Box><DisplayCreation /></Box>
 	  
-	  *TO-DO*
-	  <br />- MAIN 
-	  <br />- Convert all html and css to vanilla js for easy readability for the rest of the group.
-	  <br /><br /> - GRIDLIST
-		<br /> - Items in list must become clickable buttons that display info through table and card. Default displayed info is current day.
-		<br /> - Replace "Day 1", etc with labels that automatically change to the correct day. (calendar util?)
-		<br /> - Find different placement photos for the 5 day forecast. Possibly add function that adds up the most often occuring weather state (rainy, sunny, etc) occuring that day and give it an unique logo?
-		<br /> - IDEA: superimpose buttons over gridlist? Gridlist can still show unique images, buttons can change actual site. !!!Complex buttons build on top of a 'Button base', check into it possibly can hand make unique buttons
-		<br /> - Change Gridlist to button group
-
-		<br /><br /> - TABLE
-		<br /> - API (AARAAAARRHGHGHAGHJEGWNRWVNWREVMWEVCJWEFW)
-		<br /> - If API expertise reaches a level, could have individual highlighted table rows show their complete 3 hour report on left hand card.
-		<br /> - Highest and Lowest Temps should be bolded. Possibly add up arrow and down arrow beside them as well
-		
-		<br /><br /> - SLIDESHOW
-		<br /> - Create list of 20 random Florida weather facts. Select 4 at random and put on a revolving slideshow that changes every 10 seconds. Every page refresh should bring in another random 4 facts from the 20.
-		<br />- Above or below forecast?
-		<br /><br /> - CARD
-		<br />- Possible to add pie charts to card? It could auto change with percentage chance of rain and cloud coverage. Speedometer icon for wind speeds as well?
-		
 	</div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
