@@ -8,18 +8,12 @@ import Login from './Login'
 import Report from './Report'
 import Social from './Social'
 import Statistics from './Statistics'
+import MainPage from './mainpage'
 
 export default class extends Component {
   state = {
     gustbuddy: []
   }
-  /* 
-  async componentDidMount() {
-    const writers = await (await fetch('http://localhost:3004/writers?_embed=texts')).json()
-
-    this.setState({ writers })
-  }
-  */
 
   render() {
     const { gustbuddy } = this.state
@@ -34,6 +28,7 @@ export default class extends Component {
           <Route exact path="/report" render={() => <Report />} />
           <Route exact path="/social" render={() => <Social />} />
           <Route exact path="/statistics" render={() => <Statistics />} />
+          <Route exact path="/main" render={() => <MainPage />} />
           <Route component={NotFound} />
         </Switch>
       </Layout>

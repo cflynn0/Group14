@@ -102,7 +102,14 @@ class Layout extends Component {
             </ListItemIcon>
             Statistics
           </MenuItem>
+          <MenuItem component={Link} to="/main" selected={'/main' === pathname}>
+            <ListItemIcon>
+              <SendIcon fontSize="small" />
+            </ListItemIcon>
+            Main Page
+          </MenuItem>
           <Divider />
+
           <MenuItem component={Link} to="/social" selected={'/social' === pathname}>
             <ListItemIcon>
               <ShareIcon fontSize="small" />
