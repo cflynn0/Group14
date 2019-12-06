@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect,useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,7 +8,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import ListAltIcon from '@material-ui/icons/ListAlt';
-import Form from "./Form";
+import Form from './Form';
+import firebase from './firebase';
+
 
 
 function Copyright() {
@@ -61,9 +63,27 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Report() {
+function useEntries() {
+  const [entries, setEntries] = useState([]);
 
+  useEffect(() => {
+    firebase.firestore().collection('entries').onSnapshot((snapshot) => {
+      const newEntries = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+
+      setEntries(newEntries)
+    })
+  }, [])
+
+  return entries
+}
+
+export default function Report() {
     const classes = useStyles();
+
+    const entries = useEntries()
 
   return (
     <React.Fragment>
@@ -94,9 +114,25 @@ export default function Report() {
           </Container>
         </div>
 
+        <div>
+          <ul>
+            { entries.map((entry) =>
+                <li key={entry.id}>
+                  <div>
+                    <div>Name: {entry.firstName}</div>
+                    <div>Zip Code: {entry.location}</div>
+                    <div>Weather: {entry.description}</div>
+                    <div>Date: {entry.date}</div>
+                  </div>
+                  <br/>
+                </li>
+            )}
+          </ul>
+        </div>
+
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
-         
+
         </Container>
 
       </main>
