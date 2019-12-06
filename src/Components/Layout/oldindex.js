@@ -53,7 +53,6 @@ const styles = theme => ({
 })
 
 class Layout extends Component {
-  
   state = {
     mobileOpen: false
   }
