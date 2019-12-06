@@ -18,7 +18,13 @@ npm install recharts
 npm install react-router-dom
 npm install bootstrap
 npm install react-bootstrap    (for mainPage.js)
+James-Development
+npm install --save re-base firebase
+npm install --save firebase
 npm install https://github.com/erikflowers/weather-icons.git
+James-Development
+master
+
 npm install react-share
 npm install react-score-indicator
 npm install firebase
@@ -27,6 +33,7 @@ npm install react-redux
 npm install redux-thunk
 
 *may also need to run npm audit fix
+master
 
 master
 npm start
