@@ -383,7 +383,7 @@ class DisplayCreation extends React.Component {
 		  </Typography>
 		  <br />
 		  <Typography margin-bottom= "12" align = "center">
-	<span> {getDay(0)} </span>'s temperature ranges are a high of {getMaxArrayVal(this.state.Temp)} and a low of {getMinArrayVal(this.state.Temp)}. The day's average humidity is {this.state.humidityAvg}% and winds will stay around {this.state.windAvg} mph.
+	<span>{getDay(0)}</span>'s temperature ranges are a high of {getMaxArrayVal(this.state.Temp)} and a low of {getMinArrayVal(this.state.Temp)}. The day's average humidity is {this.state.humidityAvg}% and winds will stay around {this.state.windAvg} mph.
 		  
         </Typography>
 	

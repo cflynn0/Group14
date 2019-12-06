@@ -39,12 +39,12 @@ const useStyles = makeStyles(theme => ({
 	fontSize: 14,
   },
   table: {
+	flexGrow: 1,
 	width: '100%',
 	marginTop: theme.spacing(3),
   },
     card: {
-    width: '50%',
-	height: 690,
+    width: '10%',
   },
   pos: {
     marginBottom: 12,
@@ -116,11 +116,11 @@ const useStyles = makeStyles(theme => ({
   },
   ReactStoreIndicator:  {
 	stepColors:[
-  '#3da940',
-  '#3da940',
-  '#3da940',
-  '#53b83a',
-  '#84c42b',
+  '#ed8d00',
+  '#ed8d00',
+  '#ed8d00',
+  '#ed8d00',
+  '#ed8d00',
   '#f1bc00',
   '#ed8d00',
   '#d12000',
@@ -132,7 +132,8 @@ const useStyles = makeStyles(theme => ({
 function getDay(Adj){
 const weekDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 var today = new Date();
-return today = weekDay[today.getDay()+Adj];
+today = today.getDay()+Adj; today = (today > 6) ? today - 6 : today;
+return today = weekDay[today];
 };
 //GridList
 const images = [
@@ -140,27 +141,32 @@ const images = [
     url: 'https://s3-eu-west-1.amazonaws.com/s.i-images.co/thumbs/IIM-19185-0007.jpg',
     title: getDay(0),
 	width: '20%',
+	page: 0,
   },
   {
     url: 'https://s3-eu-west-1.amazonaws.com/s.i-images.co/thumbs/IIM-19185-0005.jpg',
     title: getDay(1),
     width: '20%',
+	page: 1,
   },
   {
     url: 'https://s3-eu-west-1.amazonaws.com/s.i-images.co/thumbs/IIM-19075-0006.jpg',
     title: getDay(2),
     width: '20%',
+	page: 2,
   },
   {
     url: 'https://s3-eu-west-1.amazonaws.com/s.i-images.co/thumbs/IIM-18619-0011.jpg',
     title: getDay(3),
     author: 'Image by Free-Photos on Pixabay',
     width: '20%',
+	page: 3,
   },
   {
     url: 'https://s3-eu-west-1.amazonaws.com/s.i-images.co/thumbs/IIM-16603-0017.jpg',
     title: getDay(4),
     width: '20%',
+	page: 4,
   },
 ];
 //Tables
@@ -182,22 +188,30 @@ const StyledTableRow = withStyles(theme => ({
   },
 }))(TableRow);
 
-function createData(time, weather, temperature, humidity, wind ) {
-  return {time, weather, temperature, humidity, wind };
+
+function getMinArrayVal(seq){
+    var minVal = seq[0];
+    for(var i = 0; i<seq.length-1; i++){
+        if(minVal < seq[i+1]){
+        continue;
+        } else {
+        minVal = seq[i+1];
+        }
+    }
+    return minVal;
 }
 
-const rows = [
-  createData('12:00 AM','data.list[0+(8*Adj)].weather.main','data.list[0+(8*Adj)].main.temp','data.list[0+(8*Adj)].main.humidity','data.list[0+(8*Adj)].wind.speed'),
-  createData('3:00 AM','data.list[1 + (8 * Adj)].weather.main','data.list[1 + (8 * Adj)].main.temp','data.list[1 + (8 * Adj)].main.humidity','data.list[1+ (8 * Adj)].wind.speed'),
-  createData('6:00 AM','data.list[2 + (8 * Adj)].weather.main','data.list[2 + (8 * Adj)].main.temp','data.list[2 + (8 * Adj)].main.humidity','data.list[2+ (8 * Adj)].wind.speed'),
-  createData('9:00 AM','data.list[3 + (8 * Adj)].weather.main','data.list[3 + (8 * Adj)].main.temp','data.list[3 + (8 * Adj)].main.humidity','data.list[3+ (8 * Adj)].wind.speed'),
-  createData('12:00 PM','data.list[4 + (8 * Adj)].weather.main','data.list[4 + (8 * Adj)].main.temp','data.list[4 + (8 * Adj)].main.humidity','data.list[4+ (8 * Adj)].wind.speed'),
-  createData('3:00 PM','data.list[5 + (8 * Adj)].weather.main','data.list[5 + (8 * Adj)].main.temp','data.list[5 + (8 * Adj)].main.humidity','data.list[5+ (8 * Adj)].wind.speed'),
-  createData('6:00 PM','data.list[6 + (8 * Adj)].weather.main','data.list[6 + (8 * Adj)].main.temp','data.list[6 + (8 * Adj)].main.humidity','data.list[6+ (8 * Adj)].wind.speed'),
-  createData('9:00 PM','data.list[7 + (8 * Adj)].weather.main','data.list[7 + (8 * Adj)].main.temp','data.list[7 + (8 * Adj)].main.humidity','data.list[7+ (8 * Adj)].wind.speed'),
-];
-
-var fApiCall = 'api.openweathermap.org/data/2.5/forecast?q=Tallahassee,US&appid=e5063c5a4e75f3258bdf88a45ded4a0a&units=metric';
+function getMaxArrayVal(seq){
+    var maxVal = seq[0];
+    for(var i = 0; i<seq.length-1; i++){
+        if(maxVal > seq[i+1]){
+        continue;
+        } else {
+        maxVal = seq[i+1];
+        }
+    }
+    return maxVal;
+}
 
 
 class SpeedChart extends Component {
@@ -212,43 +226,200 @@ class SpeedChart extends Component {
 }
 
 
+
 class DisplayCreation extends React.Component {
 	state = {
 		loading: true,
-		log0: null,
-		log1: null,
-		log2: null,
-		log3: null,
-		log4: null,
+		row0: [],
+		row1: [],
+		row2: [],
+		row3: [],
+		row4: [],
+		row5: [],
+		row6: [],
+		row7: [],
+		windAvg: null,
+		humidityAvg: null,
+		Temp: [],
+		Page: 0,
+		Name: [],
 	};
 	
+
 	componentDidMount = async () => {
-	const url ="http://api.openweathermap.org/data/2.5/forecast?q=Tallahassee,US&appid=e5063c5a4e75f3258bdf88a45ded4a0a&units=metric";
+
+	const url ="http://api.openweathermap.org/data/2.5/forecast?q=Tallahassee,US&appid=e5063c5a4e75f3258bdf88a45ded4a0a&units=imperial";
 	const response = await fetch(url);
 	const data = await response.json();
 		this.setState({
-			log0: data.list[0],
-			log1: data.list[1],
-			log2: data.list[2],
-			log3: data.list[3],
-			log4: data.list[4],
+		row0: ['12:00 AM', data.list[0+8*this.state.Page].weather[0].main,data.list[0+8*this.state.Page].main.temp, data.list[0+8*this.state.Page].main.humidity, data.list[0+8*this.state.Page].wind.speed, 7],
+			row1: ['3:00 AM', data.list[1+8*this.state.Page].weather[0].main,data.list[1+8*this.state.Page].main.temp, data.list[1+8*this.state.Page].main.humidity, data.list[1+8*this.state.Page].wind.speed],
+		row2: ['6:00 AM', data.list[2+8*this.state.Page].weather[0].main,data.list[2+8*this.state.Page].main.temp, data.list[2+8*this.state.Page].main.humidity, data.list[2+8*this.state.Page].wind.speed],
+			row3: ['9:00 AM', data.list[3+8*this.state.Page].weather[0].main,data.list[3+8*this.state.Page].main.temp, data.list[3+8*this.state.Page].main.humidity, data.list[3+8*this.state.Page].wind.speed],
+		row4: ['12:00 PM', data.list[4+8*this.state.Page].weather[0].main,data.list[4+8*this.state.Page].main.temp, data.list[4+8*this.state.Page].main.humidity, data.list[4+8*this.state.Page].wind.speed],
+			row5: ['3:00 PM', data.list[5+8*this.state.Page].weather[0].main,data.list[5+8*this.state.Page].main.temp, data.list[5+8*this.state.Page].main.humidity, data.list[5+8*this.state.Page].wind.speed],
+		row6: ['6:00 PM', data.list[6+8*this.state.Page].weather[0].main,data.list[6+8*this.state.Page].main.temp, data.list[6+8*this.state.Page].main.humidity, data.list[6+8*this.state.Page].wind.speed],
+			row7: ['9:00 PM', data.list[7+8*this.state.Page].weather[0].main,data.list[7+8*this.state.Page].main.temp, data.list[7+8*this.state.Page].main.humidity, data.list[7+8*this.state.Page].wind.speed],
+		windAvg: ((data.list[0+8*this.state.Page].wind.speed+data.list[1+8*this.state.Page].wind.speed+data.list[2+8*this.state.Page].wind.speed+data.list[3+8*this.state.Page].wind.speed+data.list[4+8*this.state.Page].wind.speed+data.list[5+8*this.state.Page].wind.speed+data.list[6+8*this.state.Page].wind.speed+data.list[7+8*this.state.Page].wind.speed)/8).toFixed(2),
+			humidityAvg: ((data.list[0+8*this.state.Page].main.humidity+data.list[1+8*this.state.Page].main.humidity+data.list[2+8*this.state.Page].main.humidity+data.list[3+8*this.state.Page].main.humidity+data.list[4+8*this.state.Page].main.humidity+data.list[5+8*this.state.Page].main.humidity+data.list[6+8*this.state.Page].main.humidity+data.list[7+8*this.state.Page].main.humidity)/8).toFixed(2),
+		Temp: [data.list[0+8*this.state.Page].main.temp,data.list[1+8*this.state.Page].main.temp,data.list[2+8*this.state.Page].main.temp,data.list[3+8*this.state.Page].main.temp,data.list[4+8*this.state.Page].main.temp,data.list[5+8*this.state.Page].main.temp,data.list[6+8*this.state.Page].main.temp,data.list[7+8*this.state.Page].main.temp],
+			Name: [data.city.name, data.city.sunrise, data.city.sunset],
 			loading:false,
 		});
-	console.log(this.state.log0);
+	console.log(data.list[0]);
+	document.getElementById("prevBut").addEventListener('click', this.pageTurn(-1), false);
+    document.getElementById("nextBut").addEventListener('click', this.pageTurn(1), false);
 	}
 	
+	goPage(pag){this.setState({Page: pag});};
+	pageTurn(pag){
+		if (this.state.Page === 4 && pag > 0 ||  this.state.Page === 0 && pag < 0) return; 
+		this.setState({Page: this.state.Page + pag});};
+	createTime(timestamp){
+		var step1 = timestamp*1000;
+		var step2 = new Date(step1);
+		var step3=step2.toLocaleString();
 
-
+		return step3;
+	}
+		
 	render(){
 		return(
 			<div>
-			{this.state.loading || !this.state.log0 ? (
-			<div> loading...</div>
-			) : (
-			<div>
-				<div> </div>
-			</div>
-			)}
+				  <Box display="flex" flexDirection="row" bgcolor="background.paper" align-items="stretch" flex-wrap="wrap">
+			
+        <Table height = "750" margintop= "theme.spacing(3)" aria-label="customized table" flexGrow="1">
+				<TableHead>
+				  <TableRow>
+					<StyledTableCell align="center">TIME OF DAY</StyledTableCell>
+					<StyledTableCell align="center">Weather</StyledTableCell>
+					<StyledTableCell align="center">Temperature&nbsp;(°F)</StyledTableCell>
+					<StyledTableCell align="center">Humidity&nbsp;(%)</StyledTableCell>
+					<StyledTableCell align="center">Wind&nbsp;(mph)</StyledTableCell>
+				  </TableRow>
+				</TableHead>
+				<TableBody>
+					<StyledTableRow>
+					  <StyledTableCell component="th" scope="row" align="center">
+					  {this.state.row0[0]}
+					  </StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row0[1]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row0[2]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row0[3]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row0[4]}</StyledTableCell>
+					</StyledTableRow>
+					
+					<StyledTableRow>
+					  <StyledTableCell component="th" scope="row" align="center">
+					  {this.state.row1[0]}
+					  </StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row1[1]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row1[2]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row1[3]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row1[4]}</StyledTableCell>
+					</StyledTableRow>
+					
+					<StyledTableRow>
+					  <StyledTableCell component="th" scope="row" align="center">
+					  {this.state.row2[0]}
+					  </StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row2[1]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row2[2]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row2[3]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row2[4]}</StyledTableCell>
+					</StyledTableRow>
+					
+					<StyledTableRow>
+					  <StyledTableCell component="th" scope="row" align="center">
+					  {this.state.row3[0]}
+					  </StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row3[1]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row3[2]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row3[3]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row3[4]}</StyledTableCell>
+					</StyledTableRow>
+					
+					<StyledTableRow>
+					  <StyledTableCell component="th" scope="row" align="center">
+					  {this.state.row4[0]}
+					  </StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row4[1]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row4[2]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row4[3]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row4[4]}</StyledTableCell>
+					</StyledTableRow>
+					
+					<StyledTableRow>
+					  <StyledTableCell component="th" scope="row" align="center">
+					  {this.state.row5[0]}
+					  </StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row5[1]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row5[2]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row5[3]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row5[4]}</StyledTableCell>
+					</StyledTableRow>
+					
+					<StyledTableRow>
+					  <StyledTableCell component="th" scope="row" align="center">
+					  {this.state.row6[0]}
+					  </StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row6[1]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row6[2]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row6[3]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row6[4]}</StyledTableCell>
+					</StyledTableRow>
+					
+					<StyledTableRow>
+					  <StyledTableCell component="th" scope="row" align="center">
+					  {this.state.row7[0]}
+					  </StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row7[1]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row7[2]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row7[3]}</StyledTableCell>
+					  <StyledTableCell align="center">{this.state.row7[4]}</StyledTableCell>
+					</StyledTableRow>
+					
+				</TableBody>
+			  </Table>
+
+			  
+			  <Card m={1}>
+				<CardContent>
+	 
+        <Typography variant="h4" align = "center">
+			 <span> {getDay(0)} </span> 's Weather Summary for {this.state.Name[0]}
+        </Typography>
+        <Typography variant="h5">
+          <span> {getDay(0)} </span>'s temperature ranges are a high of {getMaxArrayVal(this.state.Temp)} and a low of {getMinArrayVal(this.state.Temp)}. The day's average humidity is {this.state.humidityAvg}% and winds will stay around {this.state.windAvg} mph.
+		  </Typography>
+		  <br />
+		  <Typography margin-bottom= "12" align = "center">
+	<span> {getDay(0)} </span>'s temperature ranges are a high of {getMaxArrayVal(this.state.Temp)} and a low of {getMinArrayVal(this.state.Temp)}. The day's average humidity is {this.state.humidityAvg}% and winds will stay around {this.state.windAvg} mph.
+		  
+        </Typography>
+	
+        <Typography variant="body2" component="p" align = "center">
+		<b>SUNRISE: </b>  {this.createTime(this.state.Name[1])}   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>SUNSET: </b> {this.createTime(this.state.Name[2])}
+        </Typography><br /><br /><br />
+		
+		<ReactStoreIndicator
+        value={this.state.windAvg}
+        maxValue={100}
+      align="right"
+	  position="relative"
+	 />
+	 <Typography margin-bottom= "12" align = "center">
+	<b>Not your city?   </b><input type="text" placeholder="City..."></input>,<input type="text" placeholder="Country..."></input>
+		  
+        </Typography>
+      </CardContent>
+      <CardActions>
+	  <br /><br /><br /><br /><br /><br /><br />
+        <Button size="small" variant="outlined" id="prevBut" onclick="pageTurn(-1)">Previous Day</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<Button size="small" variant="outlined" id="nextBut" onclick="pageTurn(1)">Next Day</Button>
+      </CardActions>
+    </Card>
+	</Box>
 			</div>
 		);
 	}
@@ -258,14 +429,6 @@ class DisplayCreation extends React.Component {
 //HTML
 export default function ButtonAppBar() {
   const classes = useStyles();
-	class ApiConnect extends React.Component{
-	getWeather = async (e) => {
-			e.preventDefault();
-			const api_call = await fetch('${fApiCall}');
-			const data = await api_call.json();
-			console.log(data);
-	}
-	};
   return (
 
     <div className={classes.root}>
@@ -281,63 +444,9 @@ export default function ButtonAppBar() {
         </Toolbar>
       </AppBar>
 
-	  
-	  <Box display="flex" flexDirection="row" bgcolor="background.paper" align-items="stretch">
+			  <DisplayCreation />
 
-			<Paper className={classes.root}>
-			  <Table className={classes.table} aria-label="customized table">
-				<TableHead>
-				  <TableRow>
-					<StyledTableCell align="center">TIME OF DAY</StyledTableCell>
-					<StyledTableCell align="center">Weather</StyledTableCell>
-					<StyledTableCell align="center">Temperature&nbsp;(°F)</StyledTableCell>
-					<StyledTableCell align="center">Humidity&nbsp;(%)</StyledTableCell>
-					<StyledTableCell align="center">Wind&nbsp;(mph)</StyledTableCell>
-				  </TableRow>
-				</TableHead>
-				<TableBody>
-				  {rows.map(row => (
-					<StyledTableRow key={row.name} flexwrap="wrap">
-					  <StyledTableCell component="th" scope="row" align="center">
-						{row.time}
-					  </StyledTableCell>
-					  <StyledTableCell align="center">{row.weather}</StyledTableCell>
-					  <StyledTableCell align="center">{row.temperature}</StyledTableCell>
-					  <StyledTableCell align="center">{row.humidity}</StyledTableCell>
-					  <StyledTableCell align="center">{row.wind}</StyledTableCell>
-					</StyledTableRow>
-				  ))}
-				</TableBody>
-			  </Table>
-			</Paper>
-			<Card className={classes.card}  m={1}>
-      <CardContent>
-        <Typography variant="h4" align = "center">
-			<script> document.write(getDay(2));</script>*Name of Day*'s Weather Summary
-        </Typography>
-        <Typography variant="h5">
-          Example self populating sentence based on API data: You will have a clear morning, but make sure to get your errands done early as it will rain at 2pm. It clears up again at 6pm. To build after API is secured.
-		  </Typography>
-		  <br />
-		  <Typography className={classes.pos}>
-		  *Day*'s temperature ranges are a high of 'weather.main.temp_max' at *TIME* and a low of 'weather.main.temp_min' at *TIME*. Humidity is *HUMIDITY* and Wind is *MPH*.
-		  
-        </Typography>
-	
-        <Typography variant="body2" component="p">
-          Sunrise: 'weather.sys.sunrise'
-          <br />
-          Sunset: 'weather.sys.sunset'
-        </Typography>
-		<SpeedChart position = "right" />
-      </CardContent>
-      <CardActions>
-	  <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-        <Button size="small" variant="outlined">Previous Day</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<Button size="small" variant="outlined" >Next Day</Button>
-      </CardActions>
-    </Card>
-	</Box>
+
 	
 		{images.map(image => (
         <ButtonBase
@@ -347,8 +456,9 @@ export default function ButtonAppBar() {
           focusVisibleClassName={classes.focusVisible}
           style={{
             width: image.width,
+		  onclick: 'goPage({image.Page})',
           }}
-        >
+        >//onclick="pageTurn({image.Page})",
           <span
             className={classes.imageSrc}
             style={{
@@ -369,7 +479,6 @@ export default function ButtonAppBar() {
           </span>
         </ButtonBase>
       ))}
-	  <Box><DisplayCreation /></Box>
 	  
 	</div>
   );
