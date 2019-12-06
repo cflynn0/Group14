@@ -1,34 +1,91 @@
-import React from "react";
+import React, { useState } from "react";
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import firebase from './firebase';
 
-import "./form.style.css";
+function Form() {
+  const [firstName, setFirstName] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
 
-const Form = props => {
-    return(
-        <div className="container">
-            <div>{props.error ? error() : null}</div>
-            <form onSubmit={props.loadWeather}>
-                <div className="row">
-                    <div className="col-md-3 offset-md-2">
-                        <input type="text" className="form-control" name="city" autoComplete="off" placeholder="City"/>
-                    </div>
-                    <div className="col-md-3">
-                        <input type="text" className="form-control" name="country" autoComplete="off" placeholder="Country"/>
-                    </div>
-                    <div className="col-md-3 mt-md-0 text-md-left">
-                        <button className="btn btn-warning">Get Weather</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    );
-};
+  function onSubmit(e) {
+    e.preventDefault()
 
-function error(){
-    return(
-        <div className="alert alert-danger mx-5" role="alert">
-            Please Enter City and Country
-        </div>
-    )
+    firebase.firestore().collection('entries').add({
+      firstName,
+      location,
+      description,
+      date,
+    })
+    .then( () => {
+      setFirstName('')
+      setLocation('')
+      setDescription('')
+      setDate('')
+    })
+  }
+
+  return (
+    <form onSubmit={onSubmit}>
+      <TextField
+        value={firstName}
+        onChange={e => setFirstName(e.currentTarget.value)}
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
+        id="firstName"
+        label="First name"
+        name="firstName"
+        autoComplete="firstName"
+        autoFocus
+      />
+      <TextField
+        value={location}
+        onChange={e => setLocation(e.currentTarget.value)}
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
+        id="zip"
+        label="Zip code"
+        name="zip"
+        autoComplete="zip"
+      />
+      <TextField
+        value={description}
+        onChange={e => setDescription(e.currentTarget.value)}
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
+        id="description"
+        label="What's your weather like?"
+        name="description"
+        autoComplete="description"
+      />
+      <TextField
+        value={date}
+        onChange={e => setDate(e.currentTarget.value)}
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
+        id="date"
+        label="MM/DD/YYYY"
+        name="date"
+        autoComplete="date"
+      />
+
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        color="primary">
+        Submit
+      </Button>
+    </form>
+  );
 }
-
 export default Form;
