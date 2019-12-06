@@ -22,6 +22,9 @@ npm install https://github.com/erikflowers/weather-icons.git
 npm install react-share
 npm install react-score-indicator
 npm install firebase
+npm install redux
+npm install react-redux
+npm install redux-thunk
 
 *may also need to run npm audit fix
 
